@@ -85,7 +85,7 @@ module.exports = function(RED) {
         if (my_config.payloadAction.data) {
           stdin = biglib.stringify_stream(my_config.payloadAction.cr ? "\n": "");
           stdin.pipe(child.stdin);
-          child.stdin.on('finish', () => {
+          stdin.on('end', () => {
             child.stdin.end();
           });
         } else {
