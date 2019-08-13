@@ -85,14 +85,14 @@ module.exports = function(RED) {
         if (my_config.payloadAction.data) {
           stdin = biglib.stringify_stream(my_config.payloadAction.cr ? "\n": "");
           stdin.pipe(child.stdin);
+          child.stdin.on('finish', () => {
+            child.stdin.end();
+          });
         } else {
           // This dummy writable is used when the command does not need any data on its stdin
           // If any data is coming, this stream drops it and no "EPIPE error" is thrown                 
           stdin = biglib.dummy_writable();
         }
-
-        // stdin needs to be closed?
-        if (!my_config.payloadAction.stdin) child.stdin.end();
 
         // stdout configuration        
         if (my_config.format) child.stdout.setEncoding(format);
